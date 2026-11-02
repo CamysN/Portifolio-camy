@@ -5,13 +5,10 @@ import projectImageAlt from './assets/figma/project-arte-de-rua-alt.png'
 import experienceMark from './assets/figma/experience-mark.svg'
 import educationRibbon from './assets/figma/education-ribbon.svg'
 import educationOutline from './assets/figma/education-outline.svg'
-import logoFooter from './assets/figma/logo-footer.svg'
-import headerLogo from './assets/figma/Group 1171275571.svg'
+import Header from './components/Header.jsx'
+import Contact from './components/Contact.jsx'
+import Footer from './components/Footer.jsx'
 import aboutDecorationAsset from './assets/figma/logo-about.svg'
-import contactIcon from './assets/figma/contact-icon.svg'
-import linkedinLogo from './assets/figma/logo-linkedin.svg'
-import dribbbleLogo from './assets/figma/logo-dribbble.svg'
-import githubLogo from './assets/figma/logo-Github.svg'
 import skillFigma from './assets/logos-skills/skill-figma.svg'
 import skillIllustrator from './assets/logos-skills/skill-illustrator.svg'
 /* import skillPhotoshop from './assets/logos-skills/skill-photoshop.svg' */
@@ -44,7 +41,6 @@ import heroSparkles from './assets/figma/Group 1171275572.svg'
 import heroBadge from './assets/figma/Group 1171275587.svg'
 import heroPaperclip from './assets/figma/Vector (3).svg'
 import heroCursor from './assets/figma/Vector (4).svg'
-import copyrightIcon from './assets/figma/copyright.svg'
 /* import heroVectorLeft from './assets/figma/hero-vector-left.svg'
 import heroVectorRight from './assets/figma/hero-vector-right.svg' */
 /* import heroAccentLeft from './assets/figma/hero-accent-left.svg'
@@ -161,43 +157,6 @@ function ProjectCard({ image, secondaryImage, className = '', onClick, isActive,
   )
 }
 
-function Header() {
-  const [activeSection, setActiveSection] = useState('inicio')
-  const navItems = [
-    ['inicio', 'Início'],
-    ['pessoal', 'Sobre'],
-    ['habilidades', 'Habilidades'],
-    ['experiencia', 'Experiências'],
-    ['formacao', 'Formações']
-  ]
-
-  return (
-    <header className="site-header">
-      <a className="brand" href="#inicio" onClick={() => setActiveSection('inicio')} aria-label="Camilly Neves">
-        <img src={headerLogo} alt="Camilly Neves" />
-      </a>
-      <nav aria-label="Navegação principal">
-        {navItems.map(([sectionId, label]) => (
-          <a
-            className={activeSection === sectionId ? 'is-active' : undefined}
-            href={`#${sectionId}`}
-            onClick={() => setActiveSection(sectionId)}
-            aria-current={activeSection === sectionId ? 'page' : undefined}
-            key={sectionId}
-          >
-            {label}
-          </a>
-        ))}
-        {/* <a href="#contato">Contatos</a> */}
-      </nav>
-      <div className="header-actions">
-        <a className="header-button header-button--projects" href="#projetos">Projetos</a>
-        <a className="header-button header-button--contact" href="#contato">Entre em contato</a>
-      </div>
-    </header>
-  )
-}
-
 function Hero() {
   return (
     <section className="hero section-shell" id="inicio">
@@ -256,7 +215,7 @@ function Projects() {
           />
         ))}
       </div>
-      <a className="outline-button" href="#projetos">Visualizar todos os Projetos</a>
+      <a className="outline-button" href="/projetos">Visualizar todos os Projetos</a>
     </section>
   )
 }
@@ -347,95 +306,6 @@ function Education() {
         </EducationCard>
       </div>
     </section>
-  )
-}
-
-function Contact() {
-  const [formStatus, setFormStatus] = useState('idle')
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setFormStatus('sending')
-
-    const formData = new FormData(event.currentTarget)
-    const payload = Object.fromEntries(formData.entries())
-    payload._subject = 'Nova mensagem pelo portfólio'
-    payload._captcha = 'false'
-    payload._template = 'table'
-
-    try {
-      const response = await fetch('https://formsubmit.co/ajax/camillyvcn.03@gmail.com', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-
-      if (!response.ok) {
-        throw new Error('Não foi possível enviar a mensagem.')
-      }
-
-      event.currentTarget.reset()
-      setFormStatus('success')
-    } catch (error) {
-      console.error(error)
-      setFormStatus('error')
-    }
-  }
-
-  return (
-    <section className="contact section-shell" id="contato">
-      <div className="window-bar">
-        <span className="window-dots" aria-hidden="true"><i /><i /><i /></span>
-        <span className="window-title"><img src={contactIcon} alt="" />Formulário - Contato</span>
-        <span className="window-controls" aria-hidden="true"><i /><i /><i /></span>
-      </div>
-      <div className="contact-body">
-        {/* <img className="contact-panel-art" src={contactPanelArt} alt="" /> */}
-        <div className="contact-intro">
-          <p className="code-muted">// vamos conversar?</p>
-          <h2>Entre em contato<br /><em>comigo.</em></h2>
-          <p>Tem uma ideia ou projeto em mente? Envie uma mensagem e vamos criar algo incrível juntos.</p>
-          <div className="contact-socials">
-            <a href="https://www.linkedin.com/in/camilly-neves-239a60233/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-              <img src={linkedinLogo} alt="" />
-            </a>
-            <a href="https://dribbble.com/CamillyN" target="_blank" rel="noreferrer" aria-label="Dribbble">
-              <img src={dribbbleLogo} alt="" />
-            </a>
-            <a href="https://github.com/CamysN" target="_blank" rel="noreferrer" aria-label="GitHub">
-              <img src={githubLogo} alt="" />
-            </a>
-          </div>
-        </div>
-        <form className="contact-form" onSubmit={handleSubmit}>
-          <label>Nome<input name="nome" placeholder="Digite seu nome" required /></label>
-          <label>E-mail<input name="email" type="email" placeholder="Digite seu e-mail" required /></label>
-          <label>Mensagem<textarea name="mensagem" placeholder="Conte um pouco sobre seu projeto" rows="4" required /></label>
-          <button type="submit" disabled={formStatus === 'sending'}>
-            {formStatus === 'sending' ? 'Enviando...' : 'Enviar mensagem'} <span>↗</span>
-          </button>
-          {formStatus === 'success' ? <p className="form-feedback form-feedback--success" role="status">Mensagem enviada com sucesso!</p> : null}
-          {formStatus === 'error' ? <p className="form-feedback form-feedback--error" role="alert">Não foi possível enviar. Tente novamente.</p> : null}
-        </form>
-      </div>
-    </section>
-  )
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <a className="brand" href="#inicio" aria-label="Camilly Neves">
-        <img src={logoFooter} alt="Camilly Neves" />
-      </a>
-      <nav aria-label="Navegação do rodapé">
-        <a href="#inicio">Início</a><a href="#projetos">Projetos</a><a href="#pessoal">Sobre</a><a href="#habilidades">Habilidades</a><a href="#experiencia">Experiências</a><a href="#formacao">Formações</a>
-      </nav>
-      <p><img className="copyright-icon" src={copyrightIcon} alt="" />2026 Camilly Neves. Todos os direitos reservados.</p>
-    </footer>
   )
 }
 
