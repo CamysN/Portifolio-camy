@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Header from '../components/Header.jsx'
+import { ArrowUpRight } from '@phosphor-icons/react'
 import Contact from '../components/Contact.jsx'
 import Footer from '../components/Footer.jsx'
 import { projects } from '../data/projects.js'
@@ -21,7 +21,7 @@ function ProjectCard({ project }) {
         <h2>{project.title}</h2>
         <a className="catalog-card__link" href={`/projetos/${project.slug}`}>
           <span>Conhecer projeto</span>
-          <span aria-hidden="true">↗</span>
+          <span aria-hidden="true"><ArrowUpRight weight="regular" /></span>
         </a>
       </div>
     </article>
@@ -37,7 +37,6 @@ export default function Projects() {
   })
   return (
     <main className="projects-page">
-      <Header />
       <section className="projects-page__intro">
         <div className="projects-page__title-frame">
           <h1>Meus Projetos</h1>

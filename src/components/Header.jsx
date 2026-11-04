@@ -1,19 +1,43 @@
 import { useEffect, useState } from 'react'
 import headerLogo from '../assets/figma/Group 1171275571.svg'
 
+const NAV_ITEMS = [
+  ['inicio', 'Início'],
+  ['pessoal', 'Sobre'],
+  ['habilidades', 'Habilidades'],
+  ['experiencia', 'Experiências'],
+  ['formacao', 'Formações']
+]
+
 export default function Header() {
   const isHome = window.location.pathname === '/'
   const [activeSection, setActiveSection] = useState(isHome ? 'inicio' : '')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const sectionHref = (sectionId) => isHome ? `#${sectionId}` : `/#${sectionId}`
-  const contactHref = '#contato'
-  const navItems = [
-    ['inicio', 'Início'],
-    ['pessoal', 'Sobre'],
-    ['habilidades', 'Habilidades'],
-    ['experiencia', 'Experiências'],
-    ['formacao', 'Formações']
-  ]
+  const contactHref = sectionHref('contato')
+  useEffect(() => {
+    if (!isHome) return undefined
+
+    const sections = [...NAV_ITEMS.map(([sectionId]) => sectionId), 'contato']
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter(Boolean)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0]
+
+        if (visibleSection && NAV_ITEMS.some(([sectionId]) => sectionId === visibleSection.target.id)) {
+          setActiveSection(visibleSection.target.id)
+        }
+      },
+      { rootMargin: '-30% 0px -55% 0px', threshold: [0.1, 0.35, 0.6] },
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [isHome])
   useEffect(() => {
     if (!isMenuOpen) return undefined
     const handleKeyDown = (event) => {
@@ -28,18 +52,29 @@ export default function Header() {
   }, [isMenuOpen])
 
   const closeMenu = () => setIsMenuOpen(false)
+  const handleSectionClick = (event, sectionId) => {
+    if (!isHome) return
+
+    const section = document.getElementById(sectionId)
+    if (!section) return
+
+    event.preventDefault()
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setActiveSection(sectionId)
+    closeMenu()
+  }
 
   return (
     <header className={`site-header${isMenuOpen ? ' menu-is-open' : ''}`}>
-      <a className="brand" href={sectionHref('inicio')} onClick={() => setActiveSection('inicio')} aria-label="Camilly Neves">
+      <a className="brand" href={sectionHref('inicio')} onClick={(event) => handleSectionClick(event, 'inicio')} aria-label="Camilly Neves">
         <img src={headerLogo} alt="Camilly Neves" />
       </a>
       <nav aria-label="Navegação principal">
-        {navItems.map(([sectionId, label]) => (
+        {NAV_ITEMS.map(([sectionId, label]) => (
           <a
             className={activeSection === sectionId ? 'is-active' : undefined}
             href={sectionHref(sectionId)}
-            onClick={() => setActiveSection(sectionId)}
+            onClick={(event) => handleSectionClick(event, sectionId)}
             aria-current={activeSection === sectionId ? 'page' : undefined}
             key={sectionId}
           >
@@ -66,13 +101,13 @@ export default function Header() {
       <div className={`mobile-navigation-backdrop${isMenuOpen ? ' is-open' : ''}`} onClick={closeMenu} aria-hidden="true" />
       <aside className={`mobile-navigation${isMenuOpen ? ' is-open' : ''}`} id="mobile-navigation" aria-hidden={!isMenuOpen}>
         <nav aria-label="Navegação móvel">
-          {navItems.map(([sectionId, label]) => (
-            <a href={sectionHref(sectionId)} onClick={() => { setActiveSection(sectionId); closeMenu() }} key={sectionId}>
+          {NAV_ITEMS.map(([sectionId, label]) => (
+            <a href={sectionHref(sectionId)} onClick={(event) => handleSectionClick(event, sectionId)} key={sectionId}>
               {label}
             </a>
           ))}
           <a href="/projetos" onClick={closeMenu}>Projetos</a>
-          <a href={contactHref} onClick={closeMenu}>Entre em contato</a>
+          <a href={contactHref} onClick={(event) => handleSectionClick(event, 'contato')}>Entre em contato</a>
         </nav>
       </aside>
     </header>

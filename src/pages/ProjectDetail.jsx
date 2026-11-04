@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Header from '../components/Header.jsx'
+import { ArrowLeft, ArrowUpRight } from '@phosphor-icons/react'
 import Contact from '../components/Contact.jsx'
 import Footer from '../components/Footer.jsx'
 import { getTool, toolAssets } from '../data/tools.js'
@@ -47,10 +47,9 @@ export default function ProjectDetail({ project }) {
   const openImage = (src, alt) => setLightboxImage({ src, alt })
   return (
     <main className="detail-page">
-      <Header />
       <div className="detail-content">
         <section className="detail-presentation">
-          <a className="detail-back" href="/projetos"><span aria-hidden="true">←</span> Voltar para projetos</a>
+          <a className="detail-back" href="/projetos"><span aria-hidden="true"><ArrowLeft weight="regular" /></span> Voltar para projetos</a>
           <div className="detail-intro">
             <div className="detail-title-frame"><h1>{project.title}</h1></div>
             {project.description ? <p>{project.description}</p> : null}
@@ -61,7 +60,7 @@ export default function ProjectDetail({ project }) {
               <strong>{project.role}</strong>
             </div>
             <div className="detail-project-access">
-              {project.onlineUrl ? <a href={project.onlineUrl} target="_blank" rel="noreferrer">Ver projeto online <span aria-hidden="true">↗</span></a> : null}
+              {project.onlineUrl ? <a href={project.onlineUrl} target="_blank" rel="noreferrer">Ver projeto online <span aria-hidden="true"><ArrowUpRight weight="regular" /></span></a> : null}
             </div>
           </div>
         </section>
@@ -72,7 +71,7 @@ export default function ProjectDetail({ project }) {
             {project.detailCover
               ? <button className="detail-image-button detail-image-button--featured" type="button" onClick={() => openImage(project.detailCover, `Capa do projeto ${project.title}`)}><img src={project.detailCover} alt={`Capa do projeto ${project.title}`} /></button>
               : <EditablePlaceholder label="[Imagem de destaque do projeto]" featured />}
-            <p>Imagem principal para apresentar o projeto em destaque.</p>
+            <p>Capa do projeto</p>
           </div>
           <div className="detail-gallery">
             <h3>Galeria</h3>

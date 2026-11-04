@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './App.css'
 import { featuredProjects } from './data/projects.js'
 import { tools, toolAssets } from './data/tools.js'
 import experienceMark from './assets/figma/experience-mark.svg'
 import educationRibbon from './assets/figma/education-ribbon.svg'
 import educationOutline from './assets/figma/education-outline.svg'
-import Header from './components/Header.jsx'
 import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
 import aboutDecorationAsset from './assets/figma/logo-about.svg'
@@ -97,11 +96,39 @@ function Hero() {
 
 function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const stageRef = useRef(null)
   const cards = featuredProjects.filter((project) => project.featured)
+  const selectProject = (index, shouldScroll = true) => {
+    setActiveIndex(index)
+    if (!shouldScroll || window.innerWidth > 600) return
+
+    stageRef.current?.children[index]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    })
+  }
+  const handleStageScroll = (event) => {
+    const stage = event.currentTarget
+    const stageCenter = stage.getBoundingClientRect().left + stage.clientWidth / 2
+    const nextIndex = [...stage.querySelectorAll('.project-card')].reduce(
+      (closestIndex, card, index, cardList) => {
+        const closestCard = cardList[closestIndex]
+        const cardCenter = card.getBoundingClientRect().left + card.offsetWidth / 2
+        const closestCenter =
+          closestCard.getBoundingClientRect().left + closestCard.offsetWidth / 2
+        return Math.abs(cardCenter - stageCenter) < Math.abs(closestCenter - stageCenter)
+          ? index
+          : closestIndex
+      },
+      0,
+    )
+    setActiveIndex(nextIndex)
+  }
 
   return (
     <section className="projects section-shell" id="projetos">
-      <div className="projects-stage">
+      <div className="projects-stage" ref={stageRef} onScroll={handleStageScroll}>
         {cards.map((card, index) => {
           const position = (index - activeIndex + cards.length) % cards.length
           const positionClass = position === 0
@@ -117,7 +144,7 @@ function Projects() {
               index={index}
               isActive={position === 0}
               className={`project-card--carousel ${positionClass}`}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => selectProject(index)}
             />
           )
         })}
@@ -128,7 +155,7 @@ function Projects() {
             key={index}
             type="button"
             className={index === activeIndex ? 'is-active' : ''}
-            onClick={() => setActiveIndex(index)}
+            onClick={() => selectProject(index)}
             aria-label={`Ir para o projeto ${index + 1}`}
             aria-current={index === activeIndex ? 'true' : undefined}
           />
@@ -231,7 +258,6 @@ function Education() {
 export default function App() {
   return (
     <main>
-      <Header />
       <Hero />
       <Projects />
       {/* <ToolMarquee /> */}

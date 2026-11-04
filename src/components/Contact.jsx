@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ArrowUpRight } from '@phosphor-icons/react'
 import contactIcon from '../assets/figma/contact-icon.svg'
 import linkedinLogo from '../assets/figma/logo-linkedin.svg'
 import dribbbleLogo from '../assets/figma/logo-dribbble.svg'
@@ -60,7 +61,7 @@ export default function Contact() {
           <label>E-mail<input name="email" type="email" placeholder="Digite seu e-mail" required /></label>
           <label>Mensagem<textarea name="mensagem" placeholder="Conte um pouco sobre seu projeto" rows="4" required /></label>
           <button type="submit" disabled={formStatus === 'sending'}>
-            {formStatus === 'sending' ? 'Enviando...' : 'Enviar mensagem'} <span>↗</span>
+            {formStatus === 'sending' ? 'Enviando...' : 'Enviar mensagem'} <span><ArrowUpRight weight="regular" /></span>
           </button>
           {formStatus === 'success' ? <p className="form-feedback form-feedback--success" role="status">Mensagem enviada com sucesso!</p> : null}
         </form>

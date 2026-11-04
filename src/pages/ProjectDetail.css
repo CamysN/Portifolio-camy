@@ -34,8 +34,15 @@
 }
 
 .detail-back span {
+  display: inline-flex;
+  align-items: center;
   color: #bd4bf2;
   font-size: 20px;
+}
+
+.detail-back span svg,
+.detail-project-access > a span svg {
+  display: block;
 }
 
 .detail-intro {
@@ -51,7 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(522px, 100%);
+  width: min(522px, 95%);
   height: 121px;
   border: 1.5px solid #bd4bf2;
   transform: rotate(-2.55deg);
@@ -122,9 +129,13 @@
 }
 
 .detail-project-info strong {
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
   color: #b6b4c2;
   font-size: 13px;
   font-weight: 400;
+  width: fit-content;
 }
 
 .detail-project-access {
@@ -147,6 +158,9 @@
 }
 
 .detail-project-access > a span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
   font-size: 17px;
 }
@@ -269,7 +283,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  padding: 90px 32px;
   background: rgba(0, 0, 0, 0.86);
 }
 
@@ -545,7 +559,7 @@
   }
 
   .detail-lightbox__close {
-    top: 12px;
-    right: 12px;
+    top: 82px;
+    right: 13px;
   }
 }

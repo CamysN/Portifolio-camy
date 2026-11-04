@@ -178,8 +178,14 @@
 }
 
 .catalog-card__link > span:last-child {
+  display: inline-flex;
+  align-items: center;
   font-size: 16px;
   line-height: 1;
+}
+
+.catalog-card__link > span:last-child svg {
+  display: block;
 }
 
 .projects-page__pagination {
@@ -264,7 +270,7 @@
 
   .projects-page__title-frame {
     min-width: 0;
-    width: min(100%, 522px);
+    width: min(95%, 522px);
     height: clamp(82px, 24vw, 100px);
   }
 
